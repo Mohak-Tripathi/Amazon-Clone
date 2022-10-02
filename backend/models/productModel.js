@@ -71,11 +71,11 @@ const productSchema = new mongoose.Schema({
     },
     reviews: [ //array of objects
         {
-            user: {
-                type: mongoose.Schema.ObjectId,
-                ref: 'User',
-                required: true
-            },
+            // user: {
+            //     type: mongoose.Schema.ObjectId,
+            //     ref: 'User',
+            //     required: true
+            // },
             name: {
                 type: String,
                 required: true
@@ -90,11 +90,11 @@ const productSchema = new mongoose.Schema({
             }
         }
     ],
-    user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    // user: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
     createdAt: {
         type: Date,
         default: Date.now
