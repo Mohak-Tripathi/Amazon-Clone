@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please enter your password'],
-        minLength: [6, 'Your password must be longer than 6 characters'],
+        minlength: [6, 'Your password must be longer than 6 characters'],   //minlength not "minLength"
         select: false   //when displaying user- I don't want to show password of user.
     },
     avatar: {
