@@ -22,12 +22,13 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
 
 // Handling users roles
-exports.authorizeRoles = (...roles) => {
+exports.authorizeRoles = (...roles) => {   //spreading roles as there can be more than 1 role are authorized to access resource.
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        if (!roles.includes(req.user.role)) {   //req.user attched in authentication
             return next(
                 new ErrorHandler(`Role (${req.user.role}) is not allowed to acccess this resource`, 403))
         }
+        //403 forbidden request
         next()
     }
 }

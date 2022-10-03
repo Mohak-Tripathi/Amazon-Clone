@@ -6,8 +6,8 @@ const {registerUser, loginUser, logoutUser} = require('../controllers/authContro
 const {isAuthenticatedUser } = require('../middlewares/auth');
 
 
-router.route("/register").post( registerUser)
-router.route("/login").post(isAuthenticatedUser, loginUser)
+router.route("/register").post(registerUser)
+router.route("/login").post(loginUser)
 
 
 router.route("/logout").get(isAuthenticatedUser, logoutUser)  //logout is applicable to only those who have logged in first so "isAuthenticatedUser"

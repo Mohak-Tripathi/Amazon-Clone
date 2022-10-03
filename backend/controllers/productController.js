@@ -8,6 +8,9 @@ const APIFeatures = require("../utils/apiFeatures")
 exports.newProduct =   catchAsyncErrors(async(req,res,next)=>{
 
 
+    req.body.user = req.user.id;   //added in chapter- 39. Added "user" field so that we can identify "who ceated the product". Made needed changes in userModel.js too.
+
+
     const product = await Product.create(req.body);
 
     res.status(200).json({

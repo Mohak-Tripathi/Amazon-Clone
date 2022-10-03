@@ -69,15 +69,15 @@ userSchema.methods.getJwtToken = function () {
 // Generate password reset token
 userSchema.methods.getResetPasswordToken = function () {
     // Generate token
-    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetToken = crypto.randomBytes(20).toString('hex');  //toString becz it is buffer.
 
     // Hash and set to resetPasswordToken
     this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
 
     // Set token expire time
-    this.resetPasswordExpire = Date.now() + 30 * 60 * 1000
+    this.resetPasswordExpire = Date.now() + 30 * 60 * 1000  // 30 mint it will expire
 
-    return resetToken
+    return resetToken   // We are storing the has version in database but sending normal one to user. (resetToken)
 
 }
 
