@@ -182,7 +182,96 @@ exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        user
+        user    //Note - you won't get password as we did select password "false" in model. 
     })
 })
 
+// Update / Change password   =>  /api/v1/password/update
+exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('+password'); //this time, I need password.
+
+    // Check previous user password
+    const isMatched = await user.comparePassword(req.body.oldPassword)
+    if (!isMatched) {
+        return next(new ErrorHandler('Old password is incorrect', 400));
+    }
+
+    user.password = req.body.newPassword;
+    await user.save();  // save again
+
+    sendToken(user, 200, res)
+
+})
+
+
+// Update user profile   =>   /api/v1/me/update
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email
+    }
+
+    // Update avatar
+    // if (req.body.avatar !== '') {
+    //     const user = await User.findById(req.user.id)
+
+    //     const image_id = user.avatar.public_id;
+    //     const res = await cloudinary.v2.uploader.destroy(image_id);
+
+    //     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    //         folder: 'avatars',
+    //         width: 150,
+    //         crop: "scale"
+    //     })
+
+        // newUserData.avatar = {
+        //     public_id: result.public_id,
+        //     url: result.secure_url
+        // }
+    // }
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true
+    })
+})
+
+
+
+
+
+
+
+// Admin Routes
+
+// Get all users   =>   /api/v1/admin/users
+exports.allUsers = catchAsyncErrors(async (req, res, next) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        success: true,
+        length: users.length,
+        users
+    })
+})
+
+
+
+// Get user details   =>   /api/v1/admin/user/:id
+exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id);  //params and not req.user. Keep that in mind
+
+    if (!user) {
+        return next(new ErrorHandler(`User does not found with id: ${req.params.id}`, 404))
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
