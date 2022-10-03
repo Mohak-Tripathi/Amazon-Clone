@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 const errorMiddleware = require("./middlewares/errors")
 
 app.use(express.json()) // middleware for post request.
 
+//Invokie Cookie parser Middleware. 
+app.use(cookieParser())
 
 
 

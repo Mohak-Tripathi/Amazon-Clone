@@ -1,6 +1,6 @@
 // Handle Uncaught exceptions
 process.on('uncaughtException', err => {
-    console.log(`ERROR: ${err.message}`);   //err.stack to get whole error
+    console.log(`ERROR: ${err.stack}`);   //err.stack to get whole error
     console.log('Shutting down due to uncaught exception');
     process.exit(1)
 })
