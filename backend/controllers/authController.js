@@ -118,14 +118,43 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await user.save({validateBeforeSave: false });
 
-        
+
         return next(new ErrorHandler(error.message, 500))
     }
 
 })
 
 
+// Reset Password   =>  /api/v1/password/reset/:token
+exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
+    // Hash URL token
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')  //needed becz if you see in DB we stored hashed "resetPasswordToken" but we are sending normal resettoken to user in email. But now we are comparing from db so -- req.params.token (will get user token) and then comapring in db but in db it is hashed so doing unhashed with this line of code.
+
+    const user = await User.findOne({  //trying to find with resetpasswordtoken
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }  //ensuring not expired now. 
+    })
+
+    if (!user) {
+        return next(new ErrorHandler('Password reset token is invalid or has been expired', 400))
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Password does not match', 400))
+    }
+
+    // Setup new password
+    user.password = req.body.password;
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res)
+
+})
 
 
 
