@@ -69,6 +69,7 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 })
 
 
+// Admin routes
 
 // Get all orders - ADMIN  =>   /api/v1/admin/orders
 exports.allOrders = catchAsyncErrors(async (req, res, next) => {
@@ -87,3 +88,54 @@ exports.allOrders = catchAsyncErrors(async (req, res, next) => {
     })
 })
 
+
+
+
+// Update / Process order - ADMIN  =>   /api/v1/admin/order/:id
+
+//This route for admin to change the status of delivered and also updating product countInStock etc.
+exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
+    const order = await Order.findById(req.params.id)
+
+    if (order.orderStatus === 'Delivered') {
+        return next(new ErrorHandler('You have already delivered this order', 400))
+    }
+
+    order.orderItems.forEach(async item => {
+        await updateStock(item.product, item.quantity)  // In every orderItems(array of objects) => Each object has "id" and "quantity"
+    })
+
+    order.orderStatus = req.body.orderStatusCheck,
+        order.deliveredAt = Date.now()
+
+    await order.save()
+
+    res.status(200).json({
+        success: true,
+    })
+})
+
+async function updateStock(id, quantity) {
+    const product = await Product.findById(id);
+
+    product.stock = product.stock - quantity;
+
+    await product.save({ validateBeforeSave: false })
+}
+
+
+
+// Delete order   =>   /api/v1/admin/order/:id
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
+    const order = await Order.findById(req.params.id)
+
+    if (!order) {
+        return next(new ErrorHandler('No Order found with this ID', 404))
+    }
+
+    await order.remove()  // or deleteOne
+
+    res.status(200).json({
+        success: true
+    })
+})
