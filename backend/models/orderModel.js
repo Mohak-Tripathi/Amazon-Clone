@@ -11,11 +11,11 @@ const orderSchema = mongoose.Schema({
             required: true
         },
         phoneNo: {
-            type: String,
+            type: Number,
             required: true
         },
         postalCode: {
-            type: String,
+            type: Number,
             required: true
         },
         country: {
@@ -62,7 +62,7 @@ const orderSchema = mongoose.Schema({
         }
     },
     paidAt: {
-        type: Date
+        type: Date  
     },
 
     itemsPrice: {
@@ -91,7 +91,7 @@ const orderSchema = mongoose.Schema({
         default: 'Processing'  //by default
     },
     deliveredAt: {
-        type: Date
+        type: Date  //once done, therefore - not required: true
     },
     createdAt: {
         type: Date,

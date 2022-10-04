@@ -15,9 +15,11 @@ app.use(cookieParser())
 //Import all routes
 const products = require("./routes/productRoutes")
 const auth = require("./routes/authRoutes")
+const orders = require("./routes/orderRoutes")
 
 app.use("/api/v1", products)
 app.use("/api/v1", auth)
+app.use("/api/v1", orders)
 
 
 
