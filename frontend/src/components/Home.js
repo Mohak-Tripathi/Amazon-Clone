@@ -2,9 +2,9 @@ import React, { Fragment, useEffect } from "react";
 import MetaData from "./layouts/MetaData";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getProducts } from "../actions/productActions";
+import { getProducts, clearErrors} from "../actions/productActions";
 import Product from "./product/Product";
-import Loader from "./loader/Loader";
+import Loader from "./layouts/Loader";
 import { useAlert } from "react-alert";
 
 const Home = () => {
@@ -18,10 +18,14 @@ const Home = () => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
+      alert.error(error);
+      dispatch(clearErrors())
+    }
+    else{
+      dispatch(getProducts());
     }
 
-    dispatch(getProducts());
+  
   }, [dispatch, error, alert]);
 
   return (
