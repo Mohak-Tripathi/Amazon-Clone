@@ -45,7 +45,7 @@ const productCount = await Product.countDocuments() // this we will use in front
         success: true,
         count: products.length, //will show current products visible in one page
         productCount, //Will showtotal products
-        response : products
+        products
     })
 })
 
@@ -67,7 +67,7 @@ exports.getSingleProduct = catchAsyncErrors( async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        response: product
+        product
     })
 
 })
@@ -118,8 +118,6 @@ exports.updateProduct =    catchAsyncErrors( async(req, res, next) => {
     //     req.body.images = imagesLinks
 
     // }
-
-
 
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
