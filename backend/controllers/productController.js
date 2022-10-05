@@ -26,7 +26,7 @@ exports.getProducts =  catchAsyncErrors(async (req, res, next) => {
 
     
     const resPerPage = 4;
-const productCount = await Product.countDocuments() // this we will use in frontend. //Will Show total
+const productsCount = await Product.countDocuments() // this we will use in frontend. //Will Show total
 
 
     // console.log(req.query, "recheck") 
@@ -44,7 +44,7 @@ const productCount = await Product.countDocuments() // this we will use in front
     res.status(200).json({
         success: true,
         count: products.length, //will show current products visible in one page
-        productCount, //Will showtotal products
+        productsCount, //Will showtotal products
         products
     })
 })

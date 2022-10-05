@@ -1,7 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import MetaData from "./layouts/MetaData"
 
+import {useSelector, useDispatch} from "react-redux"
+import {getProducts} from "../actions/productActions"
+
 const Home = () => {
+
+  const dispatch = useDispatch()
+
+useEffect(()=>{ 
+
+dispatch(getProducts())
+}, [dispatch])
+
   return (
     <>
     <MetaData title={"Buy Best Products-FakeAmazon"}/>
@@ -18,7 +29,8 @@ const Home = () => {
               />
               <div className='card-body d-flex flex-column'>
                 <h5 className='card-title'>
-                  <a>128GB Solid Storage Memory card - SanDisk Ultra</a>
+                  <a href="footer">128GB Solid Storage Memory card - SanDisk Ultra</a>  
+                  {/* //href ?  */}
                 </h5>
                 <div className='ratings mt-auto'>
                   <div className='rating-outer'>
@@ -27,7 +39,7 @@ const Home = () => {
                   <span id='no_of_reviews'>(5 Reviews)</span>
                 </div>
                 <p className='card-text'>$45.67</p>
-                <a id='view_btn' className='btn btn-block'>
+                <a href="footer" id='view_btn' className='btn btn-block'>
                   View Details
                 </a>
               </div>
