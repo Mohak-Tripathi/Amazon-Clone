@@ -5,6 +5,8 @@ import Header from "./components/layouts/Header";
 import Footer from "./components/layouts/Footer";
 import Home from "./components/Home";
 import ProductDetails from "./components/product/ProductDetails";
+import Login from "./components/user/Login"
+
 
 import {Routes, Route} from "react-router-dom"
 
@@ -17,6 +19,7 @@ function App() {
           <Routes> 
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/login" element={<Login />} />
 
           </Routes>
         </div>

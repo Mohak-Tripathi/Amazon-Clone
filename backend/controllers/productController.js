@@ -45,7 +45,8 @@ const productsCount = await Product.countDocuments() // this we will use in fron
         success: true,
         count: products.length, //will show current products visible in one page
         productsCount, //Will showtotal products
-        products
+        products,
+        resPerPage
     })
 })
 
