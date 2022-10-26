@@ -74,7 +74,7 @@ export const register = (userData) => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",   // different than others becz we have to sent avatar i.e. pictures as well. 
       },
     };
 

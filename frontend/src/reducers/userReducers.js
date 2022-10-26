@@ -1,5 +1,5 @@
 
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, CLEAR_ERRORS, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS  } from "../constants/userConstants"
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAIL, CLEAR_ERRORS } from "../constants/userConstants"
 
 //Login Reducers
 export const authReducer = (state = { user: {} }, action) => {
