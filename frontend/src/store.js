@@ -8,12 +8,13 @@ import { composeWithDevTools } from "@redux-devtools/extension";
 import thunk from "redux-thunk";
 
 import { productsReducer, productDetailsReducer} from "./reducers/productReducers";
-import { authReducer } from "./reducers/userReducers";
+import { authReducer, userReducer} from "./reducers/userReducers";
 
 const rootreducer = combineReducers({
 products : productsReducer,
 productDetails : productDetailsReducer,
 auth: authReducer,
+user: userReducer
 });
 
 const initialState = {};

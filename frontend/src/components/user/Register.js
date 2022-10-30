@@ -55,7 +55,13 @@ const Register = () => {
         formData.set("avatar", avatar);
         console.log(formData, "FINAL");
 
-        dispatch(register(formData));
+        if (!name || !email || !password) {
+            alert.error('Please fill the complete form')
+        }
+        else {
+            dispatch(register(formData));
+        }
+
     };
 
     const onChange = (e) => {
@@ -64,11 +70,11 @@ const Register = () => {
 
             const reader = new FileReader();
 
-            console.log(reader, "reader");
+            // console.log(reader, "reader");
 
             reader.onload = () => {
                 if (reader.readyState === 2) {
-                    console.log(reader.result)
+                    // console.log(reader.result)
                     setAvatarPreview(reader.result);
                     setAvatar(reader.result);
                 }
