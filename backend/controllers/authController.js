@@ -12,26 +12,44 @@ const cloudinary = require('cloudinary');
 
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-
-    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        folder: 'avatars',  //you can create with any name in cloudinary.
-        width: 150,
-        crop: "scale"
-    })
-
     const { name, email, password } = req.body;
 
-    const user = await User.create({
-        name,
-        email,
-        password,
-        avatar: {
-            public_id: result.public_id,
-            url: result.secure_url
-        }
-    })
+    let user;
 
-// const token= user.getJwtToken()
+   // if/else is so that if user do not provide avatar, we will take deafult one
+
+    if (req.body.avatar) {
+
+        const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: 'avatars',  //you can create with any name in cloudinary.
+            width: 150,
+            crop: "scale"
+        })
+        user = await User.create({
+            name,
+            email,
+            password,
+            avatar: {
+                public_id: result.public_id,
+                url: result.secure_url
+            }
+        })
+
+    } else {
+        user = await User.create({
+            name,
+            email,
+            password,
+            avatar: {
+                public_id: "avatars/wyfcwpf7jggs7ipxuyy0",
+                url: "https://res.cloudinary.com/dtujqgpzg/image/upload/v1667116882/avatars/wyfcwpf7jggs7ipxuyy0.jpg"
+            }
+        })
+    }
+
+
+
+    // const token= user.getJwtToken()
 
     // res.status(201).json({   // before sendToken function
     //     success: true,
@@ -90,7 +108,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
     // Get reset token
     const resetToken = user.getResetPasswordToken();
-   
+
 
     await user.save({ validateBeforeSave: false });  //saved it in DB temporary basis, we will remove it sooner.
 
@@ -116,7 +134,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
         user.resetPasswordToken = undefined;   // if error make it empty
         user.resetPasswordExpire = undefined;   // if error make it empty
 
-        await user.save({validateBeforeSave: false });
+        await user.save({ validateBeforeSave: false });
 
 
         return next(new ErrorHandler(error.message, 500))
@@ -224,10 +242,10 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     //         crop: "scale"
     //     })
 
-        // newUserData.avatar = {
-        //     public_id: result.public_id,
-        //     url: result.secure_url
-        // }
+    // newUserData.avatar = {
+    //     public_id: result.public_id,
+    //     url: result.secure_url
+    // }
     // }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
