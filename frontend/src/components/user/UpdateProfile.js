@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react'
-
-import MetaData from '../layout/MetaData'
+import { useNavigate } from "react-router-dom";
+import MetaData from '../layouts/MetaData'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile, loadUser, clearErrors } from '../../actions/userActions'
-import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'
+import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'  
 
-const UpdateProfile = ({ history }) => {
+const UpdateProfile = () => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -16,6 +16,7 @@ const UpdateProfile = ({ history }) => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { user } = useSelector(state => state.auth);
     const { error, isUpdated, loading } = useSelector(state => state.user)
@@ -37,14 +38,14 @@ const UpdateProfile = ({ history }) => {
             alert.success('User updated successfully')
             dispatch(loadUser());
 
-            history.push('/me')
+            navigate('/me')
 
-            dispatch({
+            dispatch({  // I DIDN'T KNOW THAT. THIS IS HOW YOU CAN DISPATCH TOO.
                 type: UPDATE_PROFILE_RESET
             })
         }
 
-    }, [dispatch, alert, error, history, isUpdated])
+    }, [dispatch, alert, error, user, isUpdated, navigate])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -67,8 +68,8 @@ const UpdateProfile = ({ history }) => {
             }
         }
 
-        reader.readAsDataURL(e.target.files[0])
-
+        reader.readAsDataURL(e.target.files[0])  // still need clarity.
+ 
     }
     return (
         <Fragment>

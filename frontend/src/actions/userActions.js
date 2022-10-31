@@ -12,9 +12,9 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAIL,
-  // UPDATE_PASSWORD_REQUEST,
-  // UPDATE_PASSWORD_SUCCESS,
-  // UPDATE_PASSWORD_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
   // FORGOT_PASSWORD_REQUEST,
   // FORGOT_PASSWORD_SUCCESS,
   // FORGOT_PASSWORD_FAIL,
@@ -74,7 +74,7 @@ export const register = (userData) => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",   // different than others becz we have to sent avatar i.e. pictures as well. 
+        "Content-Type": "multipart/form-data", // different than others becz we have to sent avatar i.e. pictures as well.
       },
     };
 
@@ -92,76 +92,95 @@ export const register = (userData) => async (dispatch) => {
   }
 };
 
-
-
 // Load user
 export const loadUser = () => async (dispatch) => {
   try {
+    dispatch({ type: LOAD_USER_REQUEST });
 
-      dispatch({ type: LOAD_USER_REQUEST })
+    const { data } = await axios.get("/api/v1/me"); //give details of current logged in user.
 
-      const { data } = await axios.get('/api/v1/me') //give details of current logged in user. 
-
-      dispatch({
-          type: LOAD_USER_SUCCESS,
-          payload: data.user
-      })
-
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
   } catch (error) {
-      dispatch({
-          type: LOAD_USER_FAIL,
-          payload: error.response.data.message
-      })
+    dispatch({
+      type: LOAD_USER_FAIL,
+      payload: error.response.data.message,
+    });
   }
-}
-
-
-// Logout user
-export const logout = () => async (dispatch) => {
-  try {
-
-      await axios.get('/api/v1/logout')
-
-      dispatch({
-          type: LOGOUT_SUCCESS,
-      })
-
-  } catch (error) {
-      dispatch({
-          type: LOGOUT_FAIL,
-          payload: error.response.data.message
-      })
-  }
-}
+};
 
 // Update profile
 export const updateProfile = (userData) => async (dispatch) => {
   try {
+    dispatch({ type: UPDATE_PROFILE_REQUEST });
 
-      dispatch({ type: UPDATE_PROFILE_REQUEST })
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+console.log(userData, "mtuserData")
+    const { data } = await axios.put("/api/v1/me/update", userData, config);
 
-      const config = {
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-      }
-
-      const { data } = await axios.put('/api/v1/me/update', userData, config)
-
-      dispatch({
-          type: UPDATE_PROFILE_SUCCESS,
-          payload: data.success
-      })
-
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    });
   } catch (error) {
-      dispatch({
-          type: UPDATE_PROFILE_FAIL,
-          payload: error.response.data.message
-      })
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    });
   }
-}
+};
 
+// Update password
+export const updatePassword = (passwords) => async (dispatch) => {
+  //passwords becz of 2 passwords
+  try {
+    dispatch({ type: UPDATE_PASSWORD_REQUEST });
 
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      "/api/v1/password/update",
+      passwords,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PASSWORD_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PASSWORD_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Logout user
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get("/api/v1/logout");
+
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGOUT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 // Clear Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({

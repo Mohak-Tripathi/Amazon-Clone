@@ -10,6 +10,8 @@ import Register from "./components/user/Register";
 import store from "./store";
 import { loadUser } from "./actions/userActions";
 import Profile from "./components/user/Profile";
+import UpdateProfile from "./components/user/UpdateProfile";
+import UpdatePassword from "./components/user/UpdatePassword";
 import ProtectedRoute from "./components/route/ProtectedRoute"
 
 import { Routes, Route } from "react-router-dom";
@@ -31,6 +33,8 @@ function App() {
           {/* <Route path='/me' element={<Profile />} /> */}
           <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> }
           />
+           <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />
+           <Route  path='/password/update' element={<ProtectedRoute> <UpdatePassword /> </ProtectedRoute> } />
         </Routes>
       </div>
       <Footer />

@@ -15,6 +15,10 @@ import {
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_RESET,
   UPDATE_PROFILE_FAIL,
+  UPDATE_PASSWORD_FAIL,
+  UPDATE_PASSWORD_RESET,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_REQUEST,
 } from "../constants/userConstants";
 
 //Login Reducers
@@ -88,7 +92,7 @@ export const userReducer = (state = {}, action) => {
   switch (action.type) {
 
       case UPDATE_PROFILE_REQUEST :
-      // case UPDATE_PASSWORD_REQUEST:
+      case UPDATE_PASSWORD_REQUEST :
       // case UPDATE_USER_REQUEST:
       // case DELETE_USER_REQUEST:
           return {
@@ -97,7 +101,7 @@ export const userReducer = (state = {}, action) => {
           }
 
       case UPDATE_PROFILE_SUCCESS :
-      // case UPDATE_PASSWORD_SUCCESS:
+      case UPDATE_PASSWORD_SUCCESS :
       // case UPDATE_USER_SUCCESS:
           return {
               ...state,
@@ -113,7 +117,7 @@ export const userReducer = (state = {}, action) => {
       //     }
 
       case UPDATE_PROFILE_RESET:
-      // case UPDATE_PASSWORD_RESET:
+      case UPDATE_PASSWORD_RESET :
       // case UPDATE_USER_RESET:
           return {
               ...state,
@@ -127,7 +131,7 @@ export const userReducer = (state = {}, action) => {
       //     }
 
       case UPDATE_PROFILE_FAIL :
-      // case UPDATE_PASSWORD_FAIL:
+      case UPDATE_PASSWORD_FAIL :
       // case UPDATE_USER_FAIL:
       // case DELETE_USER_FAIL:
           return {

@@ -214,7 +214,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Old password is incorrect', 400));
     }
 
-    user.password = req.body.newPassword;
+    user.password = req.body.password;  //should be newPassword so much better
     await user.save();  // save again
 
     sendToken(user, 200, res)
@@ -229,24 +229,24 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
         email: req.body.email
     }
 
-    // Update avatar
-    // if (req.body.avatar !== '') {
-    //     const user = await User.findById(req.user.id)
+    //Update avatar
+    if (req.body.avatar !== '') {
+        const user = await User.findById(req.user.id)
 
-    //     const image_id = user.avatar.public_id;
-    //     const res = await cloudinary.v2.uploader.destroy(image_id);
+        const image_id = user.avatar.public_id;
+        const res = await cloudinary.v2.uploader.destroy(image_id);
 
-    //     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //         folder: 'avatars',
-    //         width: 150,
-    //         crop: "scale"
-    //     })
+        const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: 'avatars',
+            width: 150,
+            crop: "scale"
+        })
 
-    // newUserData.avatar = {
-    //     public_id: result.public_id,
-    //     url: result.secure_url
-    // }
-    // }
+    newUserData.avatar = {
+        public_id: result.public_id,
+        url: result.secure_url
+    }
+    }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
