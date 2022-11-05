@@ -15,6 +15,7 @@ import UpdatePassword from "./components/user/UpdatePassword";
 import ProtectedRoute from "./components/route/ProtectedRoute"
 
 import { Routes, Route } from "react-router-dom";
+import ForgotPasswordd from "./components/user/ForgotPassword";
 
 function App() {
   useEffect(() => {
@@ -30,11 +31,11 @@ function App() {
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          {/* <Route path='/me' element={<Profile />} /> */}
-          <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> }
-          />
-           <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />
-           <Route  path='/password/update' element={<ProtectedRoute> <UpdatePassword /> </ProtectedRoute> } />
+          <Route path='/password/forgot' element={<ForgotPasswordd />} />
+
+          <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> } />
+          <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />
+          <Route  path='/password/update' element={<ProtectedRoute> <UpdatePassword /> </ProtectedRoute> } />
         </Routes>
       </div>
       <Footer />

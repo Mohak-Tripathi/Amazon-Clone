@@ -7,14 +7,23 @@ import {
 import { composeWithDevTools } from "@redux-devtools/extension";
 import thunk from "redux-thunk";
 
-import { productsReducer, productDetailsReducer} from "./reducers/productReducers";
-import { authReducer, userReducer} from "./reducers/userReducers";
+import {
+  productsReducer,
+  productDetailsReducer,
+} from "./reducers/productReducers";
+
+import {
+  authReducer,
+  userReducer,
+  forgotPasswordReducer,
+} from "./reducers/userReducers";
 
 const rootreducer = combineReducers({
-products : productsReducer,
-productDetails : productDetailsReducer,
-auth: authReducer,
-user: userReducer
+  products: productsReducer,
+  productDetails: productDetailsReducer,
+  auth: authReducer,
+  userR: userReducer,
+  forgotPassword: forgotPasswordReducer,
 });
 
 const initialState = {};
@@ -28,17 +37,6 @@ const store = createStore(
 );
 
 export default store;
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from "react";
 // import { Grid, Paper, Avatar, TextField, Button, Box } from "@mui/material";
@@ -56,7 +54,7 @@ export default store;
 // import { login } from "../actions/userActions";
 
 // const LoginScreen = () => {
- 
+
 //   const passwordRegExp=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 
 //   const initialValues = {
@@ -81,7 +79,6 @@ export default store;
 
 //   // const { error, userInfo, loading } = userLogin;
 //     const { userInfo } = userLogin;
-  
 
 //   useEffect(() => {
 //     if (userInfo) {
@@ -94,14 +91,12 @@ export default store;
 //     const {username, password} = values;
 
 //     dispatch(login(username, password));
-   
+
 //     setInterval(()=>{
 //       props.resetForm()
 //     }, 2000)
-  
 
 //   };
-
 
 //   return (
 //     <>
@@ -139,8 +134,7 @@ export default store;
 //                   required
 //                   error = {props.errors.username && props.touched.username}
 //                   helperText={<ErrorMessage name= "username" />}
-        
-                
+
 //                 />
 //                 < Field as = {TextField}
 //                   sx={{ mt: 1.5 }}
@@ -155,7 +149,7 @@ export default store;
 //                   required
 //                   error = {props.errors.password && props.touched.password}
 //                   helperText={<ErrorMessage name="password" />}
-          
+
 //                 />
 //                 <Button
 //                   sx={{ mt: 4 }}
@@ -255,8 +249,6 @@ export default store;
 // // };
 
 // // export default LoginScreen;
-
-
 
 // import React from "react";
 // import { Grid, Paper, TextField, Button, Box, Typography } from "@mui/material";
@@ -362,7 +354,7 @@ export default store;
 //                             // label='Confidence Threshold'
 //                             variant='standard'
 //                             fullWidth
-                     
+
 //                             type="number"
 //                             required
 //                             error = {props.errors.confidence_threshold && props.touched.confidence_threshold}
@@ -384,7 +376,7 @@ export default store;
 //                             name='occupancy_sensitivity'
 //                             // label='Occupancy Sensitivity'
 //                             variant='standard'
-                     
+
 //                             fullWidth
 //                             type="number"
 //                             required
@@ -422,7 +414,7 @@ export default store;
 //                             // label='Width'
 //                             variant='standard'
 //                             fullWidth
-              
+
 //                             type="number"
 //                             required
 //                             error = {props.errors.width && props.touched.width}
@@ -444,7 +436,7 @@ export default store;
 //                             name='height'
 //                             // label='Height'
 //                             variant='standard'
-                   
+
 //                             type="number"
 //                             fullWidth
 //                             required
@@ -455,7 +447,7 @@ export default store;
 //                       </Grid>
 //                     </Grid>
 
-//                     {/* 
+//                     {/*
 //                   --------- */}
 
 //                     <Grid xs={12} item>
@@ -483,7 +475,7 @@ export default store;
 //                             // label='Degree'
 //                             variant='standard'
 //                             fullWidth
-               
+
 //                             type="number"
 //                             required
 //                             error = {props.errors.degree && props.touched.degree}
@@ -506,7 +498,7 @@ export default store;
 //                             // label='Model Input Resolution'
 //                             variant='standard'
 //                             fullWidth
-                 
+
 //                             type="number"
 //                             required
 //                             error = {props.errors.model_input_threshold && props.touched.model_input_threshold}
@@ -543,12 +535,12 @@ export default store;
 //                             // label='IOU Threshold'
 //                             variant='standard'
 //                             fullWidth
-                   
+
 //                             required
 //                             type="number"
 //                             error = {props.errors.IOU_threshold && props.touched.IOU_threshold}
 //                             helperText={<ErrorMessage name= "IOU_threshold" />}
-                            
+
 //                           />
 //                         </Grid>
 
@@ -567,7 +559,7 @@ export default store;
 //                             // label='Sleep Time'
 //                             variant='standard'
 //                             fullWidth
-                         
+
 //                             required
 //                             type="number"
 //                             error = {props.errors.sleep_time && props.touched.sleep_time}
@@ -602,8 +594,6 @@ export default store;
 
 // export default SensorScreen;
 
-
-
 // import React from "react";
 // import {
 //   Grid,
@@ -633,7 +623,6 @@ export default store;
 //     certificate_file: "",
 //   };
 
-
 //   const validationSchema = Yup.object().shape({
 //     broker: Yup.number().required("Required"),
 //     port: Yup.number().typeError("port should be number").required("Required"),
@@ -648,8 +637,6 @@ export default store;
 
 //   });
 
-
-
 //   const onSubmit = (values, props) => {
 //    console.log(values)
 
@@ -657,8 +644,6 @@ export default store;
 //     //   props.resetForm();
 //     // }, 2000);
 //   };
-
-
 
 //   return (
 //     <>
@@ -693,9 +678,6 @@ export default store;
 //               {(props) => (
 //                 <Form>
 //                   <Grid container spacing={2}>
-                    
-
-                   
 
 //                     {/* ---------- */}
 
@@ -723,7 +705,7 @@ export default store;
 //                             // label='MQTT certificate'
 //                             variant='standard'
 //                             fullWidth
-                     
+
 //                             required
 //                             error = {props.errors.mqtt_certificate && props.touched.mqtt_certificate }
 //                             helperText={<ErrorMessage name="mqtt_certificate" />}
@@ -744,7 +726,7 @@ export default store;
 //                             // label='MQTT certificate File'
 //                             variant='standard'
 //                             fullWidth
-                    
+
 //                             required
 //                             error = {props.errors.certificate_file && props.touched.certificate_file }
 //                             helperText={<ErrorMessage name= "certificate_file" />}
@@ -817,9 +799,9 @@ export default store;
 //                     {" "}
 //                     RESET MQTT Configuration{" "}
 //                   </Button>
-                    
+
 //                      </Grid
-    
+
 //                 </Grid>
 //               </Grid>
 //             </form>

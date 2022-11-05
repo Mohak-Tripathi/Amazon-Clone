@@ -14,6 +14,7 @@ const cloudinary = require('cloudinary');
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email, password } = req.body;
 
+
     let user;
 
    // if/else is so that if user do not provide avatar, we will take deafult one
