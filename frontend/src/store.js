@@ -18,15 +18,28 @@ import {
   forgotPasswordReducer,
 } from "./reducers/userReducers";
 
+
+import {cartReducer} from "./reducers/cartReducers"
+
 const rootreducer = combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
   auth: authReducer,
   userR: userReducer,
   forgotPassword: forgotPasswordReducer,
+  cart: cartReducer
 });
 
-const initialState = {};
+const initialState = {
+  cart: {
+    cartItems: localStorage.getItem('cartItems')
+        ? JSON.parse(localStorage.getItem('cartItems'))
+        : [],
+    shippingInfo: localStorage.getItem('shippingInfo')
+        ? JSON.parse(localStorage.getItem('shippingInfo'))
+        : {}
+}
+};
 
 const middleware = [thunk];
 

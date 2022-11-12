@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-
+import {useNavigate} from "react-router-dom";
 import MetaData from '../layouts/MetaData'
 
 import { useAlert } from 'react-alert'
@@ -13,6 +13,7 @@ const ForgotPasswordd = () => {
     const alert = useAlert();
     const dispatch = useDispatch();
 
+
     const { error, loading, message } = useSelector(state => state.forgotPassword)
 
     useEffect(() => {
@@ -24,6 +25,7 @@ const ForgotPasswordd = () => {
 
         if (message) {
             alert.success(message)
+       
         }
 
     }, [dispatch, alert, error, message])

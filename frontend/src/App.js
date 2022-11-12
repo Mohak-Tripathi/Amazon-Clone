@@ -13,6 +13,7 @@ import Profile from "./components/user/Profile";
 import UpdateProfile from "./components/user/UpdateProfile";
 import UpdatePassword from "./components/user/UpdatePassword";
 import ProtectedRoute from "./components/route/ProtectedRoute"
+import Cart from "./components/cart/Cart"
 
 import { Routes, Route } from "react-router-dom";
 import ForgotPasswordd from "./components/user/ForgotPassword";
@@ -33,7 +34,8 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/password/forgot' element={<ForgotPasswordd />} />
-          <Route path='/password/forgot/:token' element={<NewPassword />} />
+          <Route path='/password/reset/:token' element={<NewPassword />} />
+          <Route path='/cart' element={<Cart />} />
 
           <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> } />
           <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />

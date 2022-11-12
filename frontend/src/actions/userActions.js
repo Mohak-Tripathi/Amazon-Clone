@@ -197,6 +197,7 @@ export const forgotPassword = (email) => async (dispatch) => {
 
 // Reset password
 export const resetPassword = (token, passwords) => async (dispatch) => {
+  //token we get from url sent in email
   try {
 
       dispatch({ type: NEW_PASSWORD_REQUEST })
