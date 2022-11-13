@@ -5,7 +5,7 @@ import MetaData from '../layouts/MetaData'
 import {useNavigate} from "react-router-dom"
 // import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItemToCart} from '../../actions/cartActions'
+import { addItemToCart, removeItemToCart} from '../../actions/cartActions'
 
 const Cart = () => {
 
@@ -14,9 +14,9 @@ const Cart = () => {
 
     const { cartItems } = useSelector(state => state.cart)
 
-    // const removeCartItemHandler = (id) => {
-    //     dispatch(removeItemFromCart(id))
-    // }
+    const removeCartItemHandler = (id) => {
+        dispatch(removeItemToCart(id))
+    }
 
     const increaseQty = (id, quantity, stock) => {
         const newQty = quantity + 1;
@@ -80,7 +80,7 @@ const Cart = () => {
                                             </div>
 
                                             <div className="col-4 col-lg-1 mt-4 mt-lg-0">
-                                                {/* <i id="delete_cart_item" className="fa fa-trash btn btn-danger" onClick={() => removeCartItemHandler(item.product)} ></i> */}
+                                                <i id="delete_cart_item" className="fa fa-trash btn btn-danger" onClick={() => removeCartItemHandler(item.product)} ></i>
                                             </div>
 
                                         </div>
