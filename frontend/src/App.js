@@ -18,6 +18,8 @@ import Cart from "./components/cart/Cart"
 import { Routes, Route } from "react-router-dom";
 import ForgotPasswordd from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
+import Shipping from "./components/cart/Shipping";
+import ConfirmOrder from "./components/cart/confirmOrder"
 
 function App() {
   useEffect(() => {
@@ -40,6 +42,8 @@ function App() {
           <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> } />
           <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />
           <Route  path='/password/update' element={<ProtectedRoute> <UpdatePassword /> </ProtectedRoute> } />
+          <Route  path='/shipping' element={<ProtectedRoute> <Shipping/> </ProtectedRoute> } />
+          <Route  path='/order/confirm' element={<ProtectedRoute> <ConfirmOrder /> </ProtectedRoute> } />
         </Routes>
       </div>
       <Footer />

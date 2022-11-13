@@ -1,13 +1,15 @@
 import React, { Fragment, useState } from 'react'
 import { countries } from 'countries-list'
+import {useNavigate} from "react-router-dom"
 
-import MetaData from '../layout/MetaData'
+import MetaData from '../layouts/MetaData'
 import CheckoutSteps from './CheckoutSteps'
+import { useAlert } from "react-alert";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { saveShippingInfo } from '../../actions/cartActions'
 
-const Shipping = ({ history }) => {
+const Shipping = () => {
 
     const countriesList = Object.values(countries)
 
@@ -20,12 +22,20 @@ const Shipping = ({ history }) => {
     const [country, setCountry] = useState(shippingInfo.country)
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const alert = useAlert();
+    
 
     const submitHandler = (e) => {
         e.preventDefault()
 
-        dispatch(saveShippingInfo({ address, city, phoneNo, postalCode, country }))
-        history.push('/confirm')
+        if(!address || !country || !city || !phoneNo || !postalCode){
+        alert.error("Please enter all details")
+        }else{
+            dispatch(saveShippingInfo({ address, city, phoneNo, postalCode, country }))
+        }
+     
+        navigate('/order/confirm')
     }
 
     return (
