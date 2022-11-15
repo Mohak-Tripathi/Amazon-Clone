@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 import Header from "./components/layouts/Header";
@@ -12,19 +12,41 @@ import { loadUser } from "./actions/userActions";
 import Profile from "./components/user/Profile";
 import UpdateProfile from "./components/user/UpdateProfile";
 import UpdatePassword from "./components/user/UpdatePassword";
-import ProtectedRoute from "./components/route/ProtectedRoute"
-import Cart from "./components/cart/Cart"
+import ProtectedRoute from "./components/route/ProtectedRoute";
+import Cart from "./components/cart/Cart";
 
 import { Routes, Route } from "react-router-dom";
 import ForgotPasswordd from "./components/user/ForgotPassword";
 import NewPassword from "./components/user/NewPassword";
 import Shipping from "./components/cart/Shipping";
-import ConfirmOrder from "./components/cart/confirmOrder"
+import ConfirmOrder from "./components/cart/confirmOrder";
+import axios from "axios"
+import Payment from "./components/cart/Payment"
+
+
+
+// Payment
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+
+
 
 function App() {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
   useEffect(() => {
     store.dispatch(loadUser());
+
+    async function getStripApiKey() {
+      const { data } = await axios.get("/api/v1/stripeapi");
+      console.log(stripeApiKey, "data")
+      setStripeApiKey(data.stripeApiKey);
+    }
+
+    getStripApiKey();
   }, []);
+
+  console.log(stripeApiKey, "see")
 
   return (
     <div className='App'>
@@ -39,11 +61,65 @@ function App() {
           <Route path='/password/reset/:token' element={<NewPassword />} />
           <Route path='/cart' element={<Cart />} />
 
-          <Route  path='/me' element={<ProtectedRoute> <Profile /> </ProtectedRoute> } />
-          <Route  path='/me/update' element={<ProtectedRoute> <UpdateProfile /> </ProtectedRoute> } />
-          <Route  path='/password/update' element={<ProtectedRoute> <UpdatePassword /> </ProtectedRoute> } />
-          <Route  path='/shipping' element={<ProtectedRoute> <Shipping/> </ProtectedRoute> } />
-          <Route  path='/order/confirm' element={<ProtectedRoute> <ConfirmOrder /> </ProtectedRoute> } />
+
+          {stripeApiKey &&      
+            <Route path="/payment" 
+            element={
+              <ProtectedRoute>
+            <Elements stripe={loadStripe(stripeApiKey)}>
+              <Payment/>
+            </Elements>
+            </ProtectedRoute>
+            } 
+            />
+          }
+
+
+          <Route
+            path='/me'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <Profile />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/me/update'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <UpdateProfile />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/password/update'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <UpdatePassword />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/shipping'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <Shipping />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/order/confirm'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <ConfirmOrder />{" "}
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
       <Footer />
