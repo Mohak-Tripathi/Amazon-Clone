@@ -22,6 +22,7 @@ const Header = () => {
     <Fragment>
       <nav className='navbar row'>
         <div className='col-12 col-md-3'>
+        <Link to='/' style={{ textDecoration: "none" }}>
           <div className='navbar-brand'>
             <img
               src='/images/LogoImage.jpg'
@@ -29,6 +30,7 @@ const Header = () => {
               alt='logo'
             />
           </div>
+          </Link>
         </div>
 
         <div className='col-12 col-md-6 mt-2 mt-md-0'>

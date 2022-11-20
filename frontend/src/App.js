@@ -14,6 +14,7 @@ import UpdateProfile from "./components/user/UpdateProfile";
 import UpdatePassword from "./components/user/UpdatePassword";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import Cart from "./components/cart/Cart";
+import OrderSuccess from "./components/cart/OrderSuccess"
 
 import { Routes, Route } from "react-router-dom";
 import ForgotPasswordd from "./components/user/ForgotPassword";
@@ -22,6 +23,7 @@ import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/confirmOrder";
 import axios from "axios"
 import Payment from "./components/cart/Payment"
+import ListOrders from "./components/order/ListOrders"
 
 
 
@@ -81,6 +83,28 @@ function App() {
               <ProtectedRoute>
                 {" "}
                 <Profile />{" "}
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path='/orders/me'
+            element={
+              <ProtectedRoute>
+                {" "}
+                <ListOrders />{" "}
+              </ProtectedRoute>
+            }
+          />
+
+
+          
+<Route
+            path='/success'
+            element={
+              <ProtectedRoute>
+      
+                <OrderSuccess />
               </ProtectedRoute>
             }
           />

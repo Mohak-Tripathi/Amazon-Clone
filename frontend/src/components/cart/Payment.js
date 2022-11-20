@@ -6,11 +6,12 @@ import {useNavigate} from "react-router-dom"
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-// import { createOrder, clearErrors } from '../../actions/orderActions'
+import { createOrder, clearErrors } from '../../actions/orderActions'
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js'
-
+import { clearCart } from "../../actions/cartActions"; 
 import axios from 'axios'
+
 
 const options = {
     style: {
@@ -33,29 +34,29 @@ const Payment = () => {
 
     const { user } = useSelector(state => state.auth)
     const { cartItems, shippingInfo } = useSelector(state => state.cart);
-    // const { error } = useSelector(state => state.newOrder)
+    const { error } = useSelector(state => state.newOrder)
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (error) {
-    //         alert.error(error)
-    //         dispatch(clearErrors())
-    //     }
+        if (error) {
+            alert.error(error)
+            dispatch(clearErrors())
+        }
 
-    // }, [dispatch, alert, error])
+    }, [dispatch, alert, error])
 
-    // const order = {
-    //     orderItems: cartItems,
-    //     shippingInfo
-    // }
+    const order = {
+        orderItems: cartItems,
+        shippingInfo
+    }
 
     const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo')); //take out from session storage
-    // if (orderInfo) {
-    //     order.itemsPrice = orderInfo.itemsPrice
-    //     order.shippingPrice = orderInfo.shippingPrice
-    //     order.taxPrice = orderInfo.taxPrice
-    //     order.totalPrice = orderInfo.totalPrice
-    // }
+    if (orderInfo) {
+        order.itemsPrice = orderInfo.itemsPrice
+        order.shippingPrice = orderInfo.shippingPrice
+        order.taxPrice = orderInfo.taxPrice
+        order.totalPrice = orderInfo.totalPrice
+    }
 
     const paymentData = {  //need to send in backend
         amount: Math.round(orderInfo.totalPrice * 100)  //mutliply by 100 as you have to make it is cents
@@ -103,12 +104,14 @@ const Payment = () => {
                 // The payment is processed or not
                 if (result.paymentIntent.status === 'succeeded') {
 
-                    // order.paymentInfo = {
-                    //     id: result.paymentIntent.id,
-                    //     status: result.paymentIntent.status
-                    // }
+                    order.paymentInfo = {
+                        id: result.paymentIntent.id,
+                        status: result.paymentIntent.status
+                    }
 
-                    // dispatch(createOrder(order))
+                    dispatch(createOrder(order))  // finally order is created. 
+        
+                    dispatch(clearCart(cartItems)); // to clear the cart after order is placed successfully
 
                     navigate('/success')
                 } else {

@@ -21,13 +21,18 @@ import {
 
 import {cartReducer} from "./reducers/cartReducers"
 
+import {newOrderReducer, myOrdersReducer, orderDetailsReducer } from "./reducers/orderReducer"
+
 const rootreducer = combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
   auth: authReducer,
   userR: userReducer,
   forgotPassword: forgotPasswordReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  newOrder:newOrderReducer,
+  myOrders: myOrdersReducer ,
+  orderDetails: orderDetailsReducer
 });
 
 const initialState = {
