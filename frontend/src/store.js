@@ -10,6 +10,7 @@ import thunk from "redux-thunk";
 import {
   productsReducer,
   productDetailsReducer,
+  newReviewReducer 
 } from "./reducers/productReducers";
 
 import {
@@ -26,6 +27,7 @@ import {newOrderReducer, myOrdersReducer, orderDetailsReducer } from "./reducers
 const rootreducer = combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
+  newReview: newReviewReducer,
   auth: authReducer,
   userR: userReducer,
   forgotPassword: forgotPasswordReducer,

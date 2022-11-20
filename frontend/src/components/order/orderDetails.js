@@ -1,29 +1,31 @@
 import React, { Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import MetaData from '../layout/MetaData'
-import Loader from '../layout/Loader'
+import MetaData from '../layouts/MetaData'
+import Loader from '../layouts/Loader'
+import { useParams } from "react-router-dom";
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrderDetails, clearErrors } from '../../actions/orderActions'
 
-const OrderDetails = ({ match }) => {
+const OrderDetails = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
+    const { id } = useParams();
 
-    const { loading, error, order = {} } = useSelector(state => state.orderDetails)
+    const { loading, error, order={} } = useSelector(state => state.orderDetails)
     const { shippingInfo, orderItems, paymentInfo, user, totalPrice, orderStatus } = order
 
     useEffect(() => {
-        dispatch(getOrderDetails(match.params.id));
+        dispatch(getOrderDetails(id));
 
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
         }
-    }, [dispatch, alert, error, match.params.id])
+    }, [dispatch, alert, error, id])
 
     const shippingDetails = shippingInfo && `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.postalCode}, ${shippingInfo.country}`
 
