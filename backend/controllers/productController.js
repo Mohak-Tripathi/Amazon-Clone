@@ -3,10 +3,33 @@ const Product = require("../models/productModel")
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 const APIFeatures = require("../utils/apiFeatures")
+const cloudinary = require("cloudinary")
 
 //Create new Product.  => api/v1/product/new
 exports.newProduct =   catchAsyncErrors(async(req,res,next)=>{
 
+
+    let images = []
+    if (typeof req.body.images === 'string') { //means it is an object with type "string" and there is only one image uploadded by user
+        images.push(req.body.images)  // so we pushing
+    } else {
+        images = req.body.images  //already multiple images uploaded
+    }
+
+    let imagesLinks = [];
+
+    for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: 'products'
+        });
+
+        imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url
+        })
+    }
+
+    req.body.images = imagesLinks
 
     req.body.user = req.user.id;   //added in chapter- 39. Added "user" field so that we can identify "who ceated the product". Made needed changes in userModel.js too.
 
@@ -252,4 +275,17 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true
     })
+})
+
+
+// Get all products (Admin)  =>   /api/v1/admin/products
+exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
+
+    const products = await Product.find();
+
+    res.status(200).json({
+        success: true,
+        products
+    })
+
 })

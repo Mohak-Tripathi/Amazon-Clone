@@ -25,6 +25,7 @@ import axios from "axios";
 import Payment from "./components/cart/Payment";
 import ListOrders from "./components/order/ListOrders";
 import OrderDetails from "./components/order/orderDetails";
+// import {useSelector} from 'react-redux'
 
 // Payment
 import { Elements } from "@stripe/react-stripe-js";
@@ -32,9 +33,14 @@ import { loadStripe } from "@stripe/stripe-js";
 
 //Admin Routes
 import Dashboard from "./components/admin/Dashboard";
+import ProductList from "./components/admin/ProductList";
+import NewProduct from "./components/admin/NewProduct";
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
+
+
+  // const {loading, user} = useSelector((state)=> state.auth)
 
   useEffect(() => {
     store.dispatch(loadUser());
@@ -46,7 +52,7 @@ function App() {
     }
 
     getStripApiKey();
-  }, []);
+  }, [stripeApiKey]);
 
   console.log(stripeApiKey, "see");
 
@@ -54,7 +60,9 @@ function App() {
     <div className='App'>
       <Header />
       <div className='container container-fluid'>
-        <Routes>
+      <Routes>
+    
+ 
           <Route path='/' element={<Home />} />
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/login' element={<Login />} />
@@ -148,22 +156,44 @@ function App() {
                 <ConfirmOrder />{" "}
               </ProtectedRoute>
             }
-          />
+          /> 
 
-<Route
+      <Route
             path='/dashboard'
             element={
-              <ProtectedRoute>
-      
+              <ProtectedRoute   isAdmin={true} >
                 <Dashboard/>
               </ProtectedRoute>
             }
           />
-       </Routes>
+
+                <Route
+            path="/admin/products"
+            element={
+              <ProtectedRoute   isAdmin={true} >
+                <ProductList/>
+              </ProtectedRoute>
+            }
+          />
+
+<Route
+            path="/admin/product"
+            element={
+              <ProtectedRoute   isAdmin={true} >
+                <NewProduct/>
+              </ProtectedRoute>
+            }
+          />
+      </Routes>
+
+      
       </div>
 
-   
+      {/* {(!loading && user.role !== "admin") && ( */}
       <Footer />
+       {/* )} */}
+   
+
     </div>
   );
 }

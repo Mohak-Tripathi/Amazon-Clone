@@ -7,7 +7,7 @@ import Sidebar from './Sidebar'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-// import { getAdminProducts } from '../../actions/productActions'
+import { getAdminProducts } from '../../actions/productActions'
 // import { allOrders } from '../../actions/orderActions'
 // import { allUsers } from '../../actions/userActions'
 
@@ -15,22 +15,22 @@ const Dashboard = () => {
 
     const dispatch = useDispatch();
 
-    // const { products } = useSelector(state => state.products)
+    const { products } = useSelector(state => state.products)
     // const { users } = useSelector(state => state.allUsers)
     // const { orders, totalAmount, loading } = useSelector(state => state.allOrders)
 
     let outOfStock = 0;
-    // products.forEach(product => {
-    //     if (product.stock === 0) {
-    //         outOfStock += 1;
-    //     }
-    // })
+    products.forEach(product => {
+        if (product.stock === 0) {
+            outOfStock += 1;
+        }
+    })
 
-    // useEffect(() => {
-    //     dispatch(getAdminProducts())
-    //     dispatch(allOrders())
-    //     dispatch(allUsers())
-    // }, [dispatch])
+    useEffect(() => {
+        dispatch(getAdminProducts())
+        // dispatch(allOrders())
+        // dispatch(allUsers())
+    }, [dispatch])
 
     return (
         <Fragment>
@@ -42,7 +42,7 @@ const Dashboard = () => {
                 <div className="col-12 col-md-10">
                     <h1 className="my-4">Dashboard</h1>
 
-                    {loading ? <Loader /> : (
+                    {false ? <Loader /> : (
                         <Fragment>
                             <MetaData title={'Admin Dashboard'} />
 
@@ -63,7 +63,7 @@ const Dashboard = () => {
                                     <div className="card text-white bg-success o-hidden h-100">
                                         <div className="card-body">
                                             <div className="text-center card-font-size">Products<br />
-                                             {/* <b>{products && products.length}</b> */}
+                                             <b>{products && products.length}</b>
                                              </div>
                                         </div>
                                         <Link className="card-footer text-white clearfix small z-1" to="/admin/products">
