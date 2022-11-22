@@ -35,7 +35,7 @@ const rootreducer = combineReducers({
   product:productReducer,
   newReview: newReviewReducer,
   auth: authReducer,
-  userR: userReducer,
+  user: userReducer,
   userDetails: userDetailsReducer,
   forgotPassword: forgotPasswordReducer,
   cart: cartReducer,

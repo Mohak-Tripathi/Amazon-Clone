@@ -1,133 +1,346 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import axios from "axios";
+import {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_FAIL,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAIL,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
+  UPDATE_PROFILE_FAIL,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAIL,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAIL,
+  NEW_PASSWORD_REQUEST,
+  NEW_PASSWORD_SUCCESS,
+  NEW_PASSWORD_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAIL,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL,
+  CLEAR_ERRORS,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAIL
+} from "../constants/userConstants";
 
-import MetaData from '../layouts/MetaData'
-import Sidebar from './Sidebar'
+// Login
+export const login = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_REQUEST });
 
-import { useAlert } from 'react-alert'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateUser, getUserDetails, clearErrors } from '../../actions/userActions'
-import { UPDATE_USER_RESET } from '../../constants/userConstants'
-import { useNavigate } from 'react-router-dom'
-import {useParams} from "react-router-dom";
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-const UpdateUser = () => {
+    const { data } = await axios.post(
+      "/api/v1/login",
+      { email, password },
+      config
+    );
 
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [role, setRole] = useState('')
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: data.user, //.user bhi
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGIN_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
-    const alert = useAlert();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const {id} = useParams();
+// Register user
+export const register = (userData) => async (dispatch) => {
+  try {
+    dispatch({ type: REGISTER_USER_REQUEST });
 
-    const { error, isUpdated } = useSelector(state => state.user);
-    const { user } = useSelector(state => state.userDetails)
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data", // different than others becz we have to sent avatar i.e. pictures as well.
+      },
+    };
 
-    const userId = id;
+    const { data } = await axios.post("/api/v1/register", userData, config);
 
-    useEffect(() => {
+    dispatch({
+      type: REGISTER_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: REGISTER_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
-        // console.log(user && user._id !== userId);
-        if (user && user._id !== userId) {
-            dispatch(getUserDetails(userId))
-        } else {
-            setName(user.name);
-            setEmail(user.email);
-            setRole(user.role)
-        }
+// Load user
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USER_REQUEST });
 
-        if (error) {
-            alert.error(error);
-            dispatch(clearErrors());
-        }
+    const { data } = await axios.get("/api/v1/me"); //give details of current logged in user.
 
-        if (isUpdated) {
-            alert.success('User updated successfully')
+    dispatch({
+      type: LOAD_USER_SUCCESS,
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOAD_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
-            navigate('/admin/users')
+// Update profile
+export const updateProfile = (userData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_PROFILE_REQUEST });
 
-            dispatch({
-                type: UPDATE_USER_RESET
-            })
-        }
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+console.log(userData, "mtuserData")
+    const { data } = await axios.put("/api/v1/me/update", userData, config);
 
-    }, [dispatch, alert, error, history, isUpdated, userId, user])
+    dispatch({
+      type: UPDATE_PROFILE_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
-    const submitHandler = (e) => {
-        e.preventDefault();
+// Update password
+export const updatePassword = (passwords) => async (dispatch) => {
+  //passwords becz of 2 passwords
+  try {
+    dispatch({ type: UPDATE_PASSWORD_REQUEST });
 
-        const formData = new FormData();
-        formData.set('name', name);
-        formData.set('email', email);
-        formData.set('role', role);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-        dispatch(updateUser(user._id, formData))
-    }
+    const { data } = await axios.put(
+      "/api/v1/password/update",
+      passwords,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PASSWORD_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PASSWORD_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
 
-    return (
-        <Fragment>
-            <MetaData title={`Update User`} />
-            <div className="row">
-                <div className="col-12 col-md-2">
-                    <Sidebar />
-                </div>
+// Forgot password
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
 
-                <div className="col-12 col-md-10">
-                    <div className="row wrapper">
-                        <div className="col-10 col-lg-5">
-                            <form className="shadow-lg" onSubmit={submitHandler}>
-                                <h1 className="mt-2 mb-5">Update User</h1>
+      dispatch({ type: FORGOT_PASSWORD_REQUEST })
 
-                                <div className="form-group">
-                                    <label htmlFor="name_field">Name</label>
-                                    <input
-                                        type="name"
-                                        id="name_field"
-                                        className="form-control"
-                                        name='name'
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                </div>
+      const config = {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
 
-                                <div className="form-group">
-                                    <label htmlFor="email_field">Email</label>
-                                    <input
-                                        type="email"
-                                        id="email_field"
-                                        className="form-control"
-                                        name='email'
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </div>
+      const { data } = await axios.post('/api/v1/password/forgot', email, config)
 
-                                <div className="form-group">
-                                    <label htmlFor="role_field">Role</label>
+      dispatch({
+          type: FORGOT_PASSWORD_SUCCESS,
+          payload: data.message
+      })
 
-                                    <select
-                                        id="role_field"
-                                        className="form-control"
-                                        name='role'
-                                        value={role}
-                                        onChange={(e) => setRole(e.target.value)}
-                                    >
-                                        <option value="user">user</option>
-                                        <option value="admin">admin</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" className="btn update-btn btn-block mt-4 mb-3" >Update</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </Fragment>
-    )
+  } catch (error) {
+      dispatch({
+          type: FORGOT_PASSWORD_FAIL,
+          payload: error.response.data.message
+      })
+  }
 }
 
-export default UpdateUser
+
+// Reset password
+export const resetPassword = (token, passwords) => async (dispatch) => {
+  //token we get from url sent in email
+  try {
+
+      dispatch({ type: NEW_PASSWORD_REQUEST })
+
+      const config = {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
+
+      const { data } = await axios.put(`/api/v1/password/reset/${token}`, passwords, config)
+
+      dispatch({
+          type: NEW_PASSWORD_SUCCESS,
+          payload: data.success
+      })
+
+  } catch (error) {
+      dispatch({
+          type: NEW_PASSWORD_FAIL,
+          payload: error.response.data.message
+      })
+  }
+}
+
+// Logout user
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get("/api/v1/logout");
+
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGOUT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+
+// Get all users => ADMIN
+export const allUsers = () => async (dispatch) => {
+  try {
+
+      dispatch({ type: ALL_USERS_REQUEST })
+
+      const { data } = await axios.get('/api/v1/admin/users')
+
+      dispatch({
+          type: ALL_USERS_SUCCESS,
+          payload: data.users
+      })
+
+  } catch (error) {
+      dispatch({
+          type: ALL_USERS_FAIL ,
+          payload: error.response.data.message
+      })
+  }
+}
+
+
+// Update user - ADMIN
+export const updateUser = (id, userData) => async (dispatch) => {
+  try {
+
+      dispatch({ type: UPDATE_USER_REQUEST })
+
+      const config = {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
+
+      const { data } = await axios.put(`/api/v1/admin/user/${id}`, userData, config)
+
+      dispatch({
+          type: UPDATE_USER_SUCCESS,
+          payload: data.success
+      })
+
+  } catch (error) {
+      dispatch({
+          type: UPDATE_USER_FAIL,
+          payload: error.response.data.message
+      })
+  }
+}
+
+
+export const deleteUser = (id) => async (dispatch) => {
+  try {
+
+      dispatch({ type: DELETE_USER_REQUEST })
+
+
+      const { data } = await axios.delete(`/api/v1/admin/user/${id}`)
+
+      dispatch({
+          type: DELETE_USER_SUCCESS,
+          payload: data.success
+      })
+
+  } catch (error) {
+      dispatch({
+          type: DELETE_USER_FAIL,
+          payload: error.response.data.message
+      })
+  }
+}
+
+
+// Get user details - ADMIN
+export const getUserDetails = (id) => async (dispatch) => {
+  try {
+
+      dispatch({ type: USER_DETAILS_REQUEST })
+
+
+      const { data } = await axios.get(`/api/v1/admin/user/${id}`)
+
+      dispatch({
+          type: USER_DETAILS_SUCCESS,
+          payload: data.user
+      })
+
+  } catch (error) {
+      dispatch({
+          type: USER_DETAILS_FAIL,
+          payload: error.response.data.message
+      })
+  }
+}
+
+// Clear Errors
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  });
+};
+
+
