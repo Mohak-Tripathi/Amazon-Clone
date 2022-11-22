@@ -14,7 +14,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
         taxPrice,
         shippingPrice,
         totalPrice,
-    
+
 
     } = req.body;
 
@@ -105,8 +105,8 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
         await updateStock(item.product, item.quantity)  // In every orderItems(array of objects) => Each object has "id" and "quantity"
     })
 
-    order.orderStatus = req.body.orderStatusCheck,
-        order.deliveredAt = Date.now()
+    order.orderStatus = req.body.status
+    order.deliveredAt = Date.now()
 
     await order.save()
 

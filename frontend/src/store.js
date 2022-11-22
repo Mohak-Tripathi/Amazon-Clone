@@ -19,6 +19,8 @@ import {
   authReducer,
   userReducer,
   forgotPasswordReducer,
+  allUsersReducer,
+  userDetailsReducer
 } from "./reducers/userReducers";
 
 
@@ -34,13 +36,15 @@ const rootreducer = combineReducers({
   newReview: newReviewReducer,
   auth: authReducer,
   userR: userReducer,
+  userDetails: userDetailsReducer,
   forgotPassword: forgotPasswordReducer,
   cart: cartReducer,
   newOrder:newOrderReducer,
   myOrders: myOrdersReducer ,
   orderDetails: orderDetailsReducer,
   allOrders : allOrdersReducer,
-  order: orderReducer
+  order: orderReducer,
+  allUsers: allUsersReducer
 });
 
 const initialState = {

@@ -25,7 +25,7 @@ import axios from "axios";
 import Payment from "./components/cart/Payment";
 import ListOrders from "./components/order/ListOrders";
 import OrderDetails from "./components/order/orderDetails";
-// import {useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 // Payment
 import { Elements } from "@stripe/react-stripe-js";
@@ -37,12 +37,15 @@ import ProductList from "./components/admin/ProductList";
 import NewProduct from "./components/admin/NewProduct";
 import UpdateProduct from "./components/admin/UpdateProduct";
 import OrderList from "./components/admin/OrderList";
+import ProcessOrder from "./components/admin/ProcessOrder";
+import UsersList from "./components/admin/UserList";
+import UpdateUser from "./components/admin/UpdateUser";
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
 
 
-  // const {loading, user} = useSelector((state)=> state.auth)
+  const {loading, user} = useSelector((state)=> state.auth)
 
   useEffect(() => {
     store.dispatch(loadUser());
@@ -205,14 +208,41 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+<Route
+            path="/admin/order/:id" 
+            element={
+              <ProtectedRoute   isAdmin={true} >
+                <ProcessOrder />
+              </ProtectedRoute>
+            }
+          />
+
+<Route
+            path="/admin/users" 
+            element={
+              <ProtectedRoute   isAdmin={true} >
+                <UsersList />
+              </ProtectedRoute>
+            }
+          />
+
+<Route
+            path="/admin/user/:id" 
+            element={
+              <ProtectedRoute   isAdmin={true} >
+                <UpdateUser />
+              </ProtectedRoute>
+            }
+          />
       </Routes>
 
       
       </div>
 
-      {/* {(!loading && user.role !== "admin") && ( */}
+      {(!loading && (user && user.role !== "admin")) && (
       <Footer />
-       {/* )} */}
+       )}
    
 
     </div>

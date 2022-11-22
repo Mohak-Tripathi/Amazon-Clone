@@ -1,27 +1,29 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import MetaData from '../layout/MetaData'
-import Loader from '../layout/Loader'
+import MetaData from '../layouts/MetaData'
+import Loader from '../layouts/Loader'
 import Sidebar from './Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrderDetails, updateOrder, clearErrors } from '../../actions/orderActions'
 import { UPDATE_ORDER_RESET } from '../../constants/orderConstants'
+import {useParams} from "react-router-dom";
 
-const ProcessOrder = ({ match }) => {
+const ProcessOrder = () => {
 
     const [status, setStatus] = useState('');
 
     const alert = useAlert();
     const dispatch = useDispatch();
+    const { id} = useParams();
 
     const { loading, order = {} } = useSelector(state => state.orderDetails)
     const { shippingInfo, orderItems, paymentInfo, user, totalPrice, orderStatus } = order
     const { error, isUpdated } = useSelector(state => state.order)
 
-    const orderId = match.params.id;
+    const orderId = id;
 
     useEffect(() => {
 

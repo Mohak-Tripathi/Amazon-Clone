@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
-import MetaData from '../layouts/MetaData'
+import MetaData from '../layout/MetaData'
 import Sidebar from './Sidebar'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser, getUserDetails, clearErrors } from '../../actions/userActions'
 import { UPDATE_USER_RESET } from '../../constants/userConstants'
-import { useNavigate } from 'react-router-dom'
-import {useParams} from "react-router-dom";
+import { useNavigate} from "react-router-dom"
+import {useParams} from "react-router-dom"
 
 const UpdateUser = () => {
 
@@ -18,8 +18,8 @@ const UpdateUser = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const {id} = useParams();
+    const navigate = useNavigate()
 
     const { error, isUpdated } = useSelector(state => state.user);
     const { user } = useSelector(state => state.userDetails)
@@ -50,9 +50,10 @@ const UpdateUser = () => {
             dispatch({
                 type: UPDATE_USER_RESET
             })
+            dispatch(getUserDetails(userId))
         }
 
-    }, [dispatch, alert, error, history, isUpdated, userId, user])
+    }, [dispatch, alert, error, navigate, isUpdated, userId, user])
 
     const submitHandler = (e) => {
         e.preventDefault();
