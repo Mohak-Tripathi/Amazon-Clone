@@ -8,7 +8,7 @@ import Sidebar from './Sidebar'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getAdminProducts } from '../../actions/productActions'
-// import { allOrders } from '../../actions/orderActions'
+import { allOrders } from '../../actions/orderActions'
 // import { allUsers } from '../../actions/userActions'
 
 const Dashboard = () => {
@@ -17,7 +17,7 @@ const Dashboard = () => {
 
     const { products } = useSelector(state => state.products)
     // const { users } = useSelector(state => state.allUsers)
-    // const { orders, totalAmount, loading } = useSelector(state => state.allOrders)
+    const { orders, totalAmount, loading } = useSelector(state => state.allOrders)
 
     let outOfStock = 0;
     products.forEach(product => {
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         dispatch(getAdminProducts())
-        // dispatch(allOrders())
+        dispatch(allOrders())
         // dispatch(allUsers())
     }, [dispatch])
 
@@ -42,7 +42,7 @@ const Dashboard = () => {
                 <div className="col-12 col-md-10">
                     <h1 className="my-4">Dashboard</h1>
 
-                    {false ? <Loader /> : (
+                    {loading ? <Loader /> : (
                         <Fragment>
                             <MetaData title={'Admin Dashboard'} />
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
                                     <div className="card text-white bg-primary o-hidden h-100">
                                         <div className="card-body">
                                             <div className="text-center card-font-size">Total Amount<br /> 
-                                            {/* <b>${totalAmount && totalAmount.toFixed(2)}</b> */}  789
+                                            <b>${totalAmount && totalAmount.toFixed(2)}</b> 
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@ const Dashboard = () => {
                                     <div className="card text-white bg-danger o-hidden h-100">
                                         <div className="card-body">
                                             <div className="text-center card-font-size">Orders<br /> 
-                                            {/* <b>{orders && orders.length}</b> */}
+                                            <b>{orders && orders.length}</b>
                                             </div>
                                         </div>
                                         <Link className="card-footer text-white clearfix small z-1" to="/admin/orders">

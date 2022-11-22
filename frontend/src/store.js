@@ -11,7 +11,8 @@ import {
   productsReducer,
   productDetailsReducer,
   newReviewReducer,
-  newProductReducer 
+  newProductReducer ,
+  productReducer
 } from "./reducers/productReducers";
 
 import {
@@ -23,12 +24,13 @@ import {
 
 import {cartReducer} from "./reducers/cartReducers"
 
-import {newOrderReducer, myOrdersReducer, orderDetailsReducer } from "./reducers/orderReducer"
+import {newOrderReducer, myOrdersReducer, orderDetailsReducer, allOrdersReducer, orderReducer } from "./reducers/orderReducer"
 
 const rootreducer = combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
   newProduct : newProductReducer,
+  product:productReducer,
   newReview: newReviewReducer,
   auth: authReducer,
   userR: userReducer,
@@ -36,7 +38,9 @@ const rootreducer = combineReducers({
   cart: cartReducer,
   newOrder:newOrderReducer,
   myOrders: myOrdersReducer ,
-  orderDetails: orderDetailsReducer
+  orderDetails: orderDetailsReducer,
+  allOrders : allOrdersReducer,
+  order: orderReducer
 });
 
 const initialState = {

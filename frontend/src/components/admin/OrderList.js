@@ -1,3 +1,4 @@
+
 import React, { Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
@@ -6,64 +7,62 @@ import MetaData from '../layouts/MetaData'
 import Loader from '../layouts/Loader'
 import Sidebar from './Sidebar'
 
-import {useNavigate} from "react-router-dom"
-
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAdminProducts, deleteProduct, clearErrors } from '../../actions/productActions'
-import { DELETE_PRODUCT_RESET } from '../../constants/productConstants'
+import { allOrders, deleteOrder, clearErrors } from '../../actions/orderActions'
+// import { DELETE_ORDER_RESET } from '../../constants/orderConstants'
+import {useNavigate} from "react-router-dom"
 
-const ProductsList = () => {
+const OrdersList = () => {
 
     const alert = useAlert();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const { loading, error, products } = useSelector(state => state.products);
-    const { error: deleteError, isDeleted } = useSelector(state => state.product)
+    const { loading, error, orders } = useSelector(state => state.allOrders);
+    // const { isDeleted } = useSelector(state => state.order)
 
     useEffect(() => {
-        dispatch(getAdminProducts());
+        dispatch(allOrders());
 
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
         }
 
-        if (deleteError) {
-            alert.error(deleteError);
-            dispatch(clearErrors())
-        }
+        // if (isDeleted) {
+        //     alert.success('Order deleted successfully');
+        //     navigate('/admin/orders');
+        //     dispatch({ type: DELETE_ORDER_RESET })
+        // }
 
-        if (isDeleted) {
-            alert.success('Product deleted successfully');
-            navigate('/admin/products');
-            dispatch({ type: DELETE_PRODUCT_RESET })
-        }
+    }, [dispatch, alert, error, navigate])
 
-    }, [dispatch, alert, error, isDeleted, deleteError, navigate])
+    const deleteOrderHandler = (id) => {
+        dispatch(deleteOrder(id))
+    }
 
-    const setProducts = () => {
+    const setOrders = () => {
         const data = {
             columns: [
                 {
-                    label: 'ID',
+                    label: 'Order ID',
                     field: 'id',
                     sort: 'asc'
                 },
                 {
-                    label: 'Name',
-                    field: 'name',
+                    label: 'No of Items',
+                    field: 'numofItems',
                     sort: 'asc'
                 },
                 {
-                    label: 'Price',
-                    field: 'price',
+                    label: 'Amount',
+                    field: 'amount',
                     sort: 'asc'
                 },
                 {
-                    label: 'Stock',
-                    field: 'stock',
+                    label: 'Status',
+                    field: 'status',
                     sort: 'asc'
                 },
                 {
@@ -74,17 +73,19 @@ const ProductsList = () => {
             rows: []
         }
 
-        products.forEach(product => {
+        orders.forEach(order => {
             data.rows.push({
-                id: product._id,
-                name: product.name,
-                price: `$${product.price}`,
-                stock: product.stock,
+                id: order._id,
+                numofItems: order.orderItems.length,
+                amount: `$${order.totalPrice}`,
+                status: order.orderStatus && String(order.orderStatus).includes('Delivered')
+                    ? <p style={{ color: 'green' }}>{order.orderStatus}</p>
+                    : <p style={{ color: 'red' }}>{order.orderStatus}</p>,
                 actions: <Fragment>
-                    <Link to={`/admin/product/${product._id}`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-pencil"></i>
+                    <Link to={`/admin/order/${order._id}`} className="btn btn-primary py-1 px-2">
+                        <i className="fa fa-eye"></i>
                     </Link>
-                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteProductHandler(product._id)}>
+                    <button className="btn btn-danger py-1 px-2 ml-2" onClick={() => deleteOrderHandler(order._id)}>
                         <i className="fa fa-trash"></i>
                     </button>
                 </Fragment>
@@ -94,13 +95,10 @@ const ProductsList = () => {
         return data;
     }
 
-    const deleteProductHandler = (id) => {
-        dispatch(deleteProduct(id))
-    }
 
     return (
         <Fragment>
-            <MetaData title={'All Products'} />
+            <MetaData title={'All Orders'} />
             <div className="row">
                 <div className="col-12 col-md-2">
                     <Sidebar />
@@ -108,11 +106,11 @@ const ProductsList = () => {
 
                 <div className="col-12 col-md-10">
                     <Fragment>
-                        <h1 className="my-5">All Products</h1>
+                        <h1 className="my-5">All Orders</h1>
 
                         {loading ? <Loader /> : (
                             <MDBDataTable
-                                data={setProducts()}
+                                data={setOrders()}
                                 className="px-3"
                                 bordered
                                 striped
@@ -128,4 +126,4 @@ const ProductsList = () => {
     )
 }
 
-export default ProductsList
+export default OrdersList
