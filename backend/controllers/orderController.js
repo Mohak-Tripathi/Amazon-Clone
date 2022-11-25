@@ -30,6 +30,9 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
         user: req.user._id  //extra added
     })
 
+
+    
+
     res.status(200).json({
         success: true,
         order
