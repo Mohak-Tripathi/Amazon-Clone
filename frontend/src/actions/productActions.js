@@ -34,14 +34,13 @@ export const getProducts = (keyword="", currentPage= 1) => async (dispatch) => {
   try {
     dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-    const { data } = await axios.get(`api/v1/products?keyword=${keyword}page=${currentPage}`);
+    const { data } = await axios.get(`api/v1/products?keyword=${keyword}&page=${currentPage}`);
 
     dispatch({
       type: ALL_PRODUCTS_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: ALL_PRODUCTS_FAIL,
       payload: error.response.data.message

@@ -27,6 +27,8 @@ const Home = () => {
 
 const {keyword} = useParams();
 
+console.log(keyword, "KLKL");
+
   useEffect(() => {
     if (error) {
       alert.error(error);
